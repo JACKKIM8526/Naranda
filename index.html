@@ -346,9 +346,10 @@
         <!-- 2. 퀴즈 화면 -->
         <div id="quiz-screen">
             <div class="quiz-top">
-                <div style="display:flex; align-items:center; gap:8px;">
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                     <span id="displayUser">도전자: -</span>
                     <span class="timer-badge" id="liveTimer">⏱️ 00:00</span>
+                    <span id="displayRemain" style="font-size:0.78rem; font-weight:700; color:#4f46e5; background:#eef2ff; padding:2px 7px; border-radius:6px;">남은 문제: 0개</span>
                 </div>
                 <div class="top-btns">
                     <button class="btn-sound" id="btnSound" onclick="toggleSound()" title="효과음 켜기/끄기">🔊</button>
@@ -936,7 +937,7 @@
             document.getElementById('brainCard').style.display = "none";
             document.getElementById('relatedCard').style.display = "none";
             document.getElementById('btnNext').style.display = "none";
-            document.getElementById('displayRemain').innerText = `남은 문제: ${queue.length}개`;
+            const remainEl = document.getElementById('displayRemain'); if (remainEl) remainEl.innerText = `남은 문제: ${queue.length}개`;
 
             const qBadge = document.getElementById('qBadge');
             if (currentItem.score === 1) {
@@ -995,7 +996,6 @@
 
                 if (item.score >= 2) {
                     playMasterSound();
-                    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
                     fbStatus.innerText = "🎉 완전 정복! 뇌에 완전히 새겼습니다!";
                     fbStatus.className = "fb-status correct";
                     queue.shift();
@@ -1010,7 +1010,6 @@
                 setTimeout(loadQuestion, 650);
             } else {
                 playWrongSound();
-                if (navigator.vibrate) navigator.vibrate(100);
                 failedIds.add(item.id);
                 wrongAttempts++;
                 targetBtn.classList.add('flash-wrong');
